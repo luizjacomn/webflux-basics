@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: webflux-basics
+
+  data:
+    mongodb:
+      uri: mongodb+srv://${MONGODB_USER}:${MONGODB_PASS}@studies-cluster.wmppfno.mongodb.net/${MONGODB_DATABASE}?retryWrites=true&w=majority&appName=Studies-Cluster
