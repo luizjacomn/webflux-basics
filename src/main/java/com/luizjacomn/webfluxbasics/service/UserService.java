@@ -4,7 +4,6 @@ import com.luizjacomn.webfluxbasics.entity.User;
 import com.luizjacomn.webfluxbasics.mapper.UserMapper;
 import com.luizjacomn.webfluxbasics.model.request.UserRequest;
 import com.luizjacomn.webfluxbasics.repository.UserRepository;
-import com.luizjacomn.webfluxbasics.service.exception.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -12,7 +11,7 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements StandardService<User, UserRequest> {
 
     private final UserRepository repository;
 
@@ -24,7 +23,7 @@ public class UserService {
 
     public Mono<User> findById(String id) {
         return repository.findById(id)
-                         .switchIfEmpty(Mono.error(new ObjectNotFoundException("User not found: id = %s".formatted(id))));
+                         .switchIfEmpty(this.handleNotFound(id, User.class));
     }
 
     public Flux<User> findAll() {
@@ -35,6 +34,11 @@ public class UserService {
         return this.findById(id)
                    .map(user -> userMapper.toEntity(updatedUser, user))
                    .flatMap(repository::save);
+    }
+
+    public Mono<User> delete(final String id) {
+        return repository.findAndRemove(id)
+                         .switchIfEmpty(this.handleNotFound(id, User.class));
     }
 
 }

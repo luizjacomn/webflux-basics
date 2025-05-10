@@ -1,6 +1,7 @@
 package com.luizjacomn.webfluxbasics.controller.impl;
 
 import com.luizjacomn.webfluxbasics.controller.UserController;
+import com.luizjacomn.webfluxbasics.entity.User;
 import com.luizjacomn.webfluxbasics.mapper.UserMapper;
 import com.luizjacomn.webfluxbasics.model.request.UserRequest;
 import com.luizjacomn.webfluxbasics.model.response.UserResponse;
@@ -30,11 +31,9 @@ public class UserControllerImpl implements UserController {
 
     @PostMapping
     @Override
-    public ResponseEntity<Mono<Void>> save(@RequestBody final UserRequest request) {
+    public ResponseEntity<Mono<UserResponse>> save(@RequestBody final UserRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.save(request)
-                .then()
-        );
+                             .body(service.save(request).map(userMapper::toResponse));
     }
 
     @GetMapping("/{id}")
@@ -58,7 +57,7 @@ public class UserControllerImpl implements UserController {
     @DeleteMapping("/{id}")
     @Override
     public ResponseEntity<Mono<Void>> delete(@PathVariable final String id) {
-        return null;
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.delete(id).then());
     }
 
 }

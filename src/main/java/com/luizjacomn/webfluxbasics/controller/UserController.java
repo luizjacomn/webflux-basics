@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 public interface UserController {
 
-    ResponseEntity<Mono<Void>> save(final @Valid UserRequest request);
+    ResponseEntity<Mono<UserResponse>> save(final @Valid UserRequest request);
 
     ResponseEntity<Mono<UserResponse>> findById(final String id);
 
