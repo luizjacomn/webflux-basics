@@ -1,9 +1,8 @@
 package com.luizjacomn.webfluxbasics.service;
 
 import com.luizjacomn.webfluxbasics.entity.User;
-import com.luizjacomn.webfluxbasics.mapper.UserMapper;
-import com.luizjacomn.webfluxbasics.model.request.UserRequest;
 import com.luizjacomn.webfluxbasics.repository.UserRepository;
+import com.luizjacomn.webfluxbasics.service.exception.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -14,10 +13,13 @@ public class UserService {
 
     private final UserRepository repository;
 
-    private final UserMapper mapper;
+    public Mono<User> save(final User newUser) {
+        return repository.save(newUser);
+    }
 
-    public Mono<User> save(final UserRequest request) {
-        return repository.save(mapper.toEntity(request));
+    public Mono<User> findById(String id) {
+        return repository.findById(id)
+                         .switchIfEmpty(Mono.error(new ObjectNotFoundException("User not found: id = %s".formatted(id))));
     }
 
 }

@@ -2,6 +2,7 @@ package com.luizjacomn.webfluxbasics.mapper;
 
 import com.luizjacomn.webfluxbasics.entity.User;
 import com.luizjacomn.webfluxbasics.model.request.UserRequest;
+import com.luizjacomn.webfluxbasics.model.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
@@ -16,5 +17,7 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     User toEntity(final UserRequest request);
+
+    UserResponse toResponse(final User entity);
 
 }

@@ -1,6 +1,7 @@
 package com.luizjacomn.webfluxbasics.controller.impl;
 
 import com.luizjacomn.webfluxbasics.controller.UserController;
+import com.luizjacomn.webfluxbasics.mapper.UserMapper;
 import com.luizjacomn.webfluxbasics.model.request.UserRequest;
 import com.luizjacomn.webfluxbasics.model.response.UserResponse;
 import com.luizjacomn.webfluxbasics.service.UserService;
@@ -25,19 +26,21 @@ public class UserControllerImpl implements UserController {
 
     private final UserService service;
 
+    private final UserMapper userMapper;
+
     @PostMapping
     @Override
     public ResponseEntity<Mono<Void>> save(@RequestBody final UserRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.save(request)
+                .body(service.save(userMapper.toEntity(request))
                 .then()
         );
     }
 
     @GetMapping("/{id}")
     @Override
-    public ResponseEntity<Mono<UserResponse>> find(@PathVariable final String id) {
-        return null;
+    public ResponseEntity<Mono<UserResponse>> findById(@PathVariable final String id) {
+        return ResponseEntity.ok(service.findById(id).map(userMapper::toResponse));
     }
 
     @GetMapping

@@ -11,7 +11,7 @@ public interface UserController {
 
     ResponseEntity<Mono<Void>> save(final @Valid UserRequest request);
 
-    ResponseEntity<Mono<UserResponse>> find(final String id);
+    ResponseEntity<Mono<UserResponse>> findById(final String id);
 
     ResponseEntity<Flux<UserResponse>> findAll();
 
