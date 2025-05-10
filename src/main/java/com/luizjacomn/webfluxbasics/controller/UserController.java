@@ -15,7 +15,7 @@ public interface UserController {
 
     ResponseEntity<Flux<UserResponse>> findAll();
 
-    ResponseEntity<Mono<UserResponse>> update(final String id, final @Valid UserRequest request);
+    ResponseEntity<Mono<UserResponse>> update(final String id, final UserRequest request);
 
     ResponseEntity<Mono<Void>> delete(final String id);
 

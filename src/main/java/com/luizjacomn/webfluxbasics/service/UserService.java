@@ -1,6 +1,8 @@
 package com.luizjacomn.webfluxbasics.service;
 
 import com.luizjacomn.webfluxbasics.entity.User;
+import com.luizjacomn.webfluxbasics.mapper.UserMapper;
+import com.luizjacomn.webfluxbasics.model.request.UserRequest;
 import com.luizjacomn.webfluxbasics.repository.UserRepository;
 import com.luizjacomn.webfluxbasics.service.exception.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +16,10 @@ public class UserService {
 
     private final UserRepository repository;
 
-    public Mono<User> save(final User newUser) {
-        return repository.save(newUser);
+    private final UserMapper userMapper;
+
+    public Mono<User> save(final UserRequest newUser) {
+        return repository.save(userMapper.toEntity(newUser));
     }
 
     public Mono<User> findById(String id) {
@@ -25,6 +29,12 @@ public class UserService {
 
     public Flux<User> findAll() {
         return repository.findAll();
+    }
+
+    public Mono<User> update(String id, final UserRequest updatedUser) {
+        return this.findById(id)
+                   .map(user -> userMapper.toEntity(updatedUser, user))
+                   .flatMap(repository::save);
     }
 
 }

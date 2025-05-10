@@ -32,7 +32,7 @@ public class UserControllerImpl implements UserController {
     @Override
     public ResponseEntity<Mono<Void>> save(@RequestBody final UserRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.save(userMapper.toEntity(request))
+                .body(service.save(request)
                 .then()
         );
     }
@@ -52,7 +52,7 @@ public class UserControllerImpl implements UserController {
     @PatchMapping("/{id}")
     @Override
     public ResponseEntity<Mono<UserResponse>> update(@PathVariable final String id, @RequestBody final UserRequest request) {
-        return null;
+        return ResponseEntity.ok(service.update(id, request).map(userMapper::toResponse));
     }
 
     @DeleteMapping("/{id}")
