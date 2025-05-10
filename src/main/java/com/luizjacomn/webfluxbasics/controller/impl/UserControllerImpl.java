@@ -46,7 +46,7 @@ public class UserControllerImpl implements UserController {
     @GetMapping
     @Override
     public ResponseEntity<Flux<UserResponse>> findAll() {
-        return null;
+        return ResponseEntity.ok(service.findAll().map(userMapper::toResponse));
     }
 
     @PatchMapping("/{id}")

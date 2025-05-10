@@ -5,6 +5,7 @@ import com.luizjacomn.webfluxbasics.repository.UserRepository;
 import com.luizjacomn.webfluxbasics.service.exception.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
@@ -20,6 +21,10 @@ public class UserService {
     public Mono<User> findById(String id) {
         return repository.findById(id)
                          .switchIfEmpty(Mono.error(new ObjectNotFoundException("User not found: id = %s".formatted(id))));
+    }
+
+    public Flux<User> findAll() {
+        return repository.findAll();
     }
 
 }
