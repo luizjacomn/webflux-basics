@@ -1,7 +1,6 @@
 package com.luizjacomn.webfluxbasics.controller.impl;
 
 import com.luizjacomn.webfluxbasics.controller.UserController;
-import com.luizjacomn.webfluxbasics.entity.User;
 import com.luizjacomn.webfluxbasics.mapper.UserMapper;
 import com.luizjacomn.webfluxbasics.model.request.UserRequest;
 import com.luizjacomn.webfluxbasics.model.response.UserResponse;

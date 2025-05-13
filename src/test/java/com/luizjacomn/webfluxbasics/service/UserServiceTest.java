@@ -5,6 +5,8 @@ import com.luizjacomn.webfluxbasics.entity.User;
 import com.luizjacomn.webfluxbasics.mapper.UserMapper;
 import com.luizjacomn.webfluxbasics.model.request.UserRequest;
 import com.luizjacomn.webfluxbasics.repository.UserRepository;
+import com.luizjacomn.webfluxbasics.service.exception.ObjectNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -143,6 +145,25 @@ class UserServiceTest {
                 .verify();
 
         Mockito.verify(userRepository).findAndRemove(ArgumentMatchers.anyString());
+    }
+
+    @Test
+    void handleUserNotFound() {
+        // Arrange
+        var idThatNotExists = faker.idNumber().valid();
+
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyString())).thenReturn(Mono.empty());
+
+        // Act
+        try {
+            userService.findById(idThatNotExists).block();
+        } catch (Exception e) {
+            // Assert
+            Assertions.assertEquals(ObjectNotFoundException.class, e.getClass());
+            Assertions.assertEquals("User not found: id = %s".formatted(idThatNotExists), e.getMessage());
+            Mockito.verify(userRepository).findById(ArgumentMatchers.anyString());
+        }
+
     }
 
 }
